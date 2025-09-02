@@ -1,3 +1,4 @@
+_Note that I usually work with clear commits and PRs. Let me know if you want me to do that in this case as well._
 
 ## Pre-req
 

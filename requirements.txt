@@ -1,0 +1,9 @@
+requests==2.31.0
+beautifulsoup4==4.12.3
+# urllib3 v2+ requires OpenSSL 1.1.1+, but macOS uses LibreSSL 2.8.3
+# This version constraint ensures compatibility with LibreSSL
+urllib3<2.0.0
+fpdf2==2.8.4
+sec-parser==0.58.1
+weasyprint==62.0
+flask

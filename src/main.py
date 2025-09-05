@@ -1,27 +1,31 @@
 from flask import Flask, request
 
-from src.ingestion.Retriever import Retriever
+from src.ingestion.PdfReportFetcher import PdfReportFetcher
+from src.ingestion.SecEdgarCrawler import SecEdgarCrawler
+from src.ingestion.ReportReporter import ReportReporter
 
 app = Flask(__name__)
 
-retriever = Retriever()
-print(retriever.convert_companies_10ks_to_pdfs("ingestion/companies.txt"))
-print(retriever.get_latest_10k_company_statement("Paychex Inc"))
-print(retriever.get_latest_10k_company_statement("Not a company"))
+secEdgarCrawler = SecEdgarCrawler()
+pdfReportFetcher = PdfReportFetcher()
+reportReporter = ReportReporter(secEdgarCrawler, pdfReportFetcher)
+reportReporter.convert_reports_to_pdfs("ingestion/companies.txt")
+
 
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
+
 @app.route("/convert-10ks-for-companies")
 def convert_10ks_for_companies():
-    retriever.convert_companies_10ks_to_pdfs("ingestion/companies.txt")
-    return retriever.company_has_10k()
+    return reportReporter.convert_reports_to_pdfs("ingestion/companies.txt")
 
 @app.route("/get-latest-10k/")
 def get_latest_10k():
     requested_company = request.args.get("data")
-    return retriever.get_latest_10k_company_statement_with_flask(requested_company)
+    return reportReporter.download_pdf_report_for_company_name(requested_company)
+
 
 
 
